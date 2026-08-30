@@ -9,6 +9,7 @@
 | 边界冻结 | `BOUNDARY.md` |
 | kit 说明 | `docs/agent-team/README.md` |
 | 接入新项目 | `docs/agent-team/bootstrap-new-project.md` |
+| 工作区版本钉 | `docs/agent-team/workspace-version-pin.md` |
 | 逐步 SOP | `docs/agent-team/coach-playbook.md` |
 | 教练 | `@agent-team-coach` |
 | 规范维护 | `@agent-team-maintainer` |

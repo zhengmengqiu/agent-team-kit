@@ -64,8 +64,9 @@
 
 | 模式 | 说明 |
 |------|------|
-| **A 单仓（本模板默认）** | 三根 = 同一仓库。复制 `.cursor/agents/` + `docs/agent-team/` 到目标仓即可。 |
-| **B 货架 kit + 工作区 docs** | 一份 kit（playbook/agents）+ 独立 `{名}-docs` 作为 `workspace_docs`。spec 与 handoff 写在 `*-docs`，不写进纯 kit。 |
+| **工作区版本钉（推荐）** | 并列目录 + `.code-workspace` 钉 tag。见 [workspace-version-pin.md](./workspace-version-pin.md)。 |
+| **A 兼容 copy** | 把 agents / docs 复制进业务仓。易漂移，仅过渡。 |
+| **B 货架 kit + 工作区 docs** | 一份 kit + 独立 `{名}-docs`。spec 写在 `*-docs`。 |
 
 模式 B 给将来多仓用。复制到 `*-docs` 的路径规则片段见 [snippets/workspace-docs-paths.mdc](./snippets/workspace-docs-paths.mdc)。**不要**在 L0 写入任何公司磁盘路径。
 
@@ -75,4 +76,5 @@
 
 | 日期 | 说明 |
 |------|------|
+| 2026-08-30 | 推荐消费方式改为工作区版本钉 |
 | 2026-08-24 | 初版：三根目录 + 单仓退化 + `handoff-to-coach.md` |

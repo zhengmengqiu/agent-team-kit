@@ -12,6 +12,7 @@
 |------|------|
 | **[bootstrap-new-project.md](./bootstrap-new-project.md)** | **接入新项目**（工作区钉版本 · 兼容 copy） |
 | **[sync-prompts.md](./sync-prompts.md)** | **跨项目同步话术**（回流 kit / 横向） |
+| **[workspace-version-pin.md](./workspace-version-pin.md)** | **工作区钉版本协议**（字段 + Sync 脚本） |
 | **[workspace-layout.md](./workspace-layout.md)** | **三根目录** kit / workspace_docs / code_root |
 | **[coach-playbook.md](./coach-playbook.md)** | 逐步 SOP |
 | **[trial-run-guide.md](./trial-run-guide.md)** | 试跑 SOP |

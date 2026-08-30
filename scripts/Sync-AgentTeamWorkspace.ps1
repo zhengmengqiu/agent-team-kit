@@ -1,17 +1,12 @@
-<#
+﻿<#
 .SYNOPSIS
   按 .code-workspace 中的 agentTeam.version 对齐 kit worktree，并更新 folders 路径。
 
-.DESCRIPTION
-  1. 读取工作区 settings.agentTeam.version / agentTeam.kitRepo / agentTeam.worktreesRoot
-  2. fetch tags；若无对应 worktree 则 git worktree add
-  3. 将名为 agent-team-kit@* 或 path 指向 worktrees 的 folder 更新为该版本路径
-
 .PARAMETER WorkspaceFile
-  目标 .code-workspace 绝对或相对路径。省略则在当前目录查找 *.code-workspace。
+  目标 .code-workspace 路径。省略则在当前目录查找唯一的 *.code-workspace。
 
 .EXAMPLE
-  .\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile ..\spring-ai-study\spring-ai-study.code-workspace
+  .\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile .\your-project.code-workspace
 #>
 [CmdletBinding()]
 param(
@@ -36,9 +31,16 @@ function Get-RelativePathCompat([string]$FromDir, [string]$ToPath) {
     return [System.Uri]::UnescapeDataString($rel).Replace('/', '\')
 }
 
+function Get-SettingValue($settings, [string]$Name) {
+    if ($null -eq $settings) { return $null }
+    $prop = $settings.PSObject.Properties[$Name]
+    if ($prop) { return [string]$prop.Value }
+    return $null
+}
+
 if (-not $WorkspaceFile) {
-    $found = Get-ChildItem -Path (Get-Location) -Filter "*.code-workspace" -File -ErrorAction SilentlyContinue
-    if (-not $found -or $found.Count -eq 0) {
+    $found = @(Get-ChildItem -Path (Get-Location) -Filter "*.code-workspace" -File -ErrorAction SilentlyContinue)
+    if ($found.Count -eq 0) {
         throw "未指定 -WorkspaceFile，且当前目录无 *.code-workspace"
     }
     if ($found.Count -gt 1) {
@@ -54,17 +56,16 @@ if (-not (Test-Path -LiteralPath $WorkspaceFile)) {
 
 $wsDir = Split-Path -Parent $WorkspaceFile
 $raw = Get-Content -LiteralPath $WorkspaceFile -Raw -Encoding UTF8
-# VS Code 允许 JSONC（注释）；去掉 // 与 /* */ 以便 ConvertFrom-Json
 $jsonText = [regex]::Replace($raw, '(?m)^\s*//.*$', '')
 $jsonText = [regex]::Replace($jsonText, '/\*[\s\S]*?\*/', '')
 $ws = $jsonText | ConvertFrom-Json
 
-if (-not $ws.settings) {
-    throw "工作区缺少 settings"
-}
-$version = [string]$ws.settings.'agentTeam.version'
-$kitRepoRel = [string]$ws.settings.'agentTeam.kitRepo'
-$worktreesRel = [string]$ws.settings.'agentTeam.worktreesRoot'
+$settings = $ws.settings
+if (-not $settings) { throw "工作区缺少 settings" }
+
+$version = Get-SettingValue $settings "agentTeam.version"
+$kitRepoRel = Get-SettingValue $settings "agentTeam.kitRepo"
+$worktreesRel = Get-SettingValue $settings "agentTeam.worktreesRoot"
 
 if (-not $version) { throw "settings.agentTeam.version 未设置" }
 if (-not $kitRepoRel) { $kitRepoRel = "../agent-team-kit" }
@@ -85,8 +86,11 @@ Write-Host "worktree  = $wtPath"
 Push-Location $kitRepo
 try {
     git fetch --tags --prune 2>&1 | Out-Host
-    $tagOk = git rev-parse -q --verify "refs/tags/$version" 2>$null
-    if (-not $tagOk) {
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "warn: git fetch 失败，改用本地 tag"
+    }
+    git show-ref --verify --quiet "refs/tags/$version"
+    if ($LASTEXITCODE -ne 0) {
         throw "tag 不存在: $version（请先在 agent-team-kit 打 tag 并 push）"
     }
 
@@ -103,36 +107,63 @@ finally {
     Pop-Location
 }
 
-# 更新 folders：优先匹配 name agent-team-kit@* 或 path 含 .agent-team-worktrees
 $folders = @($ws.folders)
 if ($folders.Count -eq 0) { throw "工作区 folders 为空" }
 
 $kitFolderIndex = -1
 for ($i = 0; $i -lt $folders.Count; $i++) {
     $name = [string]$folders[$i].name
-    $path = [string]$folders[$i].path
-    if ($name -like "agent-team-kit@*" -or $path -match '\.agent-team-worktrees|agent-team-kit') {
-        if ($name -like "agent-team-kit@*" -or $path -match '\.agent-team-worktrees') {
+    if ($name -like "agent-team-kit@*") {
+        $kitFolderIndex = $i
+        break
+    }
+}
+if ($kitFolderIndex -lt 0) {
+    for ($i = 0; $i -lt $folders.Count; $i++) {
+        $path = [string]$folders[$i].path
+        if ($path -match '\.agent-team-worktrees') {
             $kitFolderIndex = $i
             break
         }
-        if ($kitFolderIndex -lt 0) { $kitFolderIndex = $i }
     }
 }
-if ($kitFolderIndex -lt 0) { $kitFolderIndex = 0 }
+if ($kitFolderIndex -lt 0) {
+    throw "找不到 kit folder：请将 name 设为 agent-team-kit@<version>，或 path 指向 .agent-team-worktrees/<version>"
+}
 
-# 工作区相对路径
 $relWt = (Get-RelativePathCompat $wsDir $wtPath).Replace('\', '/')
 $folders[$kitFolderIndex].name = "agent-team-kit@$version"
 $folders[$kitFolderIndex].path = $relWt
-$ws.folders = $folders
-$ws.settings.'agentTeam.version' = $version
-$ws.settings.'agentTeam.kitRepo' = ($kitRepoRel -replace '\\', '/')
-$ws.settings.'agentTeam.worktreesRoot' = ($worktreesRel -replace '\\', '/')
 
-$out = $ws | ConvertTo-Json -Depth 20
+$folderList = New-Object System.Collections.Generic.List[object]
+foreach ($f in $folders) {
+    $folderList.Add([ordered]@{
+        name = [string]$f.name
+        path = [string]$f.path
+    }) | Out-Null
+}
+
+$settingsOut = [ordered]@{}
+foreach ($p in $settings.PSObject.Properties) {
+    $settingsOut[$p.Name] = $p.Value
+}
+$settingsOut["agentTeam.version"] = $version
+$settingsOut["agentTeam.kitRepo"] = ($kitRepoRel -replace '\\', '/')
+$settingsOut["agentTeam.worktreesRoot"] = ($worktreesRel -replace '\\', '/')
+
+$outObj = [ordered]@{
+    folders  = $folderList.ToArray()
+    settings = $settingsOut
+}
+# 保留工作区里 folders/settings 以外的键（如 launch、extensions）
+foreach ($p in $ws.PSObject.Properties) {
+    if ($p.Name -eq "folders" -or $p.Name -eq "settings") { continue }
+    $outObj[$p.Name] = $p.Value
+}
+
+$out = $outObj | ConvertTo-Json -Depth 20
 [System.IO.File]::WriteAllText($WorkspaceFile, $out + "`n", [System.Text.UTF8Encoding]::new($false))
 
 Write-Host "Updated $WorkspaceFile"
 Write-Host "kit folder => $relWt"
-Write-Host "Done. 若 Cursor 已打开该工作区，请 Reload Window 以加载新路径。"
+Write-Host "Done. 若 Cursor 已打开该工作区，请 Reload Window。"
