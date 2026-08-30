@@ -78,7 +78,7 @@
 
 - Gate 0 → `track: complex`
 - 初始化 `session-checkpoint.md`（含 `run_mode` / `trial_stop`）
-- P1 完整执行提示词
+- P1：Write `kickoff.md` + 教练窗 C-人读（禁止贴 P1 长文）
 
 ---
 

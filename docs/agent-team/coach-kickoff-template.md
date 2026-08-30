@@ -10,8 +10,9 @@
 |------|------|
 | [A 开场](#template-a) | 教练对话首条 |
 | [B 续接](#template-b) | 教练窗收口：读 handoff，不要拷执行窗 |
-| [C 执行头](#template-c) | 每条执行提示词顶部 |
-| [D 回传包](#template-d) | 写入 `handoff-to-coach.md`（勿贴进聊天） |
+| [C 派工落盘](#template-c) | 教练 Write `kickoff.md`；聊天只出 C-人读 |
+| [C-人读](#template-c-user) | 教练窗短报 + 新窗种子（勿贴长文） |
+| [D 回传包](#template-d) | 追加到 `handoff-to-coach.md`（按对话名一节，禁止整文件覆盖） |
 | [D-人读](#template-d-user) | 执行窗结束短报 |
 | [E 定制约定](#template-e) | 权限、**交付边界**等自控项 |
 | [F Phase1](#template-f) | proposal 执行 |
@@ -148,7 +149,7 @@ A / B / C / D / E / F / 混合（如 B+C+D）
 0. Gate 0 判轨 + 写入 session-checkpoint 的 track、run_mode、trial_stop 字段
 1. 当前 Phase 判断
 2. 是否新开执行对话
-3. 带【对话名】的完整执行提示词（含 Write `handoff-to-coach.md` 要求）
+3. Write `kickoff.md` + 教练窗只出 **模板 C-人读**（含新窗种子；禁止贴完整执行长文）
 ```
 
 ---
@@ -168,7 +169,7 @@ A / B / C / D / E / F / 混合（如 B+C+D）
 请 Read `{workspace_docs}/docs/features/<feature>/handoff-to-coach.md`（无文件 = 本步未结束，不要给下一 Phase）。
 不要等我粘贴执行窗正文或模板 D 全文。
 
-请给下一步：是否新开对话、带【对话名】的完整执行提示词。
+请给下一步：是否新开对话；**Write kickoff.md**；教练窗只出模板 C-人读（含种子）。不要把完整执行长文贴进本窗。
 （可选）若 session-checkpoint 为 trial-validation：请附带【AUDIT-<刚完成 Phase>】完整审计提示词（已填 feature 路径；你不要执行审计）。
 ```
 
@@ -184,24 +185,53 @@ A / B / C / D / E / F / 混合（如 B+C+D）
 
 <a id="template-c"></a>
 
-## 模板 C：执行对话「标准头」（每条任务最上方）
+## 模板 C：派工（写入 `kickoff.md` · 禁止把长文贴进教练窗）
 
-```text
-【对话名】<feature>-<phase>-<role>-<task>
+> **落盘**：`{workspace_docs}/docs/features/<feature>/kickoff.md`  
+> 并行最多 **2** 窗：同一文件写两个 `## 派工 {对话名}`。串行下一步可整文件换成新的派工节。  
+> 教练窗只出 [模板 C-人读](#template-c-user)。
+
+```markdown
+# 派工
+
+## 派工 `<feature>-<phase>-<role>-<task>`
+
 【功能】<feature_name>
-【阶段】<人类可读，如 Phase 6 Step 5 — push 前 Gate>
+【阶段】<人类可读>
 【角色】@<agent_name>
 
-@<agent_name>
+### 任务
+<任务正文：范围、Read 哪些 spec、本步交付>
 
-<任务正文…>
-
----
-## 约束（按需删改）
-- 先 Read：docs/features/<feature>/design.md、tasks.md
+### 约束
 - 本对话仅做：<本步范围>
-- 完成后：**Write** `{workspace_docs}/docs/features/<feature>/handoff-to-coach.md`（模板 D，覆盖写）；聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话
-- 提醒用户回教练窗：「<对话名> 完成，读 handoff」（不要拷执行窗正文）
+- 先 Read：<design.md / tasks.md / …>
+- 完成后：向 `{workspace_docs}/docs/features/<feature>/handoff-to-coach.md` **追加**一节 `## 回传 <本对话名>`（模板 D）
+  - 文件不存在：可新建，且内容只有这一节
+  - 已有本对话名一节：只替换该节
+  - **禁止**整文件覆盖以致删掉其他 `## 回传` 节
+- 聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话
+- 提醒用户回教练窗：「<对话名> 完成，读 handoff」
+```
+
+<a id="template-c-user"></a>
+
+## 派工（人读）
+
+> 教练窗**只输出本块**；完整任务已 Write 到 `kickoff.md`。
+
+```markdown
+## 派工（人读）
+
+1. **新开**：【对话名】· @<agent>
+2. **本步你要知道**：<范围 / Gate / 会不会并行（最多 2）>
+3. **种子**（只把下面几行贴到新窗，不要拷长文）：
+
+@<agent_name>
+【对话名】<对话名>
+请 Read `{workspace_docs}/docs/features/<feature>/kickoff.md` 中标题「## 派工 `<对话名>`」并执行。
+
+kickoff：`{workspace_docs}/docs/features/<feature>/kickoff.md`
 ```
 
 ### 常用对话名示例（替换 `<feature>`）
@@ -221,17 +251,15 @@ A / B / C / D / E / F / 混合（如 B+C+D）
 
 <a id="template-d"></a>
 
-## 模板 D：【回传教练包】（写入文件 · 禁止只写在对话）
+## 模板 D：【回传教练包】（按对话名追加 · 禁止整文件覆盖）
 
-> **落盘强制**：`{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md`（覆盖写；本仓 `{workspace_docs}` = 仓库根）。  
+> **落盘**：`{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md`  
+> **一节一个对话名**：标题必须是 `## 回传 {对话名}`。并行两窗各自追加，互不删除对方的节。  
 > **聊天不要贴 D 全文**，改用 [模板 D-人读](#template-d-user)。  
-> **旧式粘贴仅兼容**：用户若仍把本模板贴进教练窗，教练可接受；执行 Agent 不得以此代替写文件。
+> **旧式整文件覆盖 / 贴进教练窗**：仅兼容读取；执行 Agent 不得再整文件覆盖。
 
 ```markdown
-## 【回传教练包】
-
-### 对话名
-<feature>-<phase>-<role>-<task>
+## 回传 <feature>-<phase>-<role>-<task>
 
 ### 步骤
 <一步摘要，如 Step 4' — B/E 复测>
@@ -351,7 +379,7 @@ handoff：`{workspace_docs}/docs/features/<feature>/handoff-to-coach.md`
 5. 遵循 spec-author，Gate 1 自检（有阻塞 P2 的仍开放 OQ → ⚠️ 或 ❌，禁止 silent ✅）
 6. 先不要写代码
 
-完成后：**Write** `{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md`（模板 D，含开放问题全文表，覆盖写）；聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话。
+完成后：向 `{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md` **追加** `## 回传 <对话名>`（模板 D，含开放问题全文表）；禁止整文件覆盖；聊天只出 **模板 D-人读**。
 提醒用户回教练窗：「<对话名> 完成，读 handoff」。
 ```
 
@@ -473,7 +501,7 @@ docs/features/<feature_name>/test-report-<YYYYMMDD>.md
 - **pending-todos 开放（L2/依赖）**：Pending-待确认（不算 Fail）
 - `[Out-of-Scope]`：Skip
 
-完成后：**Write** `{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md`（模板 D，覆盖写）；聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话。
+完成后：向 `{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md` **追加** `## 回传 <对话名>`（模板 D）；禁止整文件覆盖；聊天只出 **模板 D-人读**。
 提醒用户回教练窗：「<对话名> 完成，读 handoff」。
 ```
 
@@ -500,7 +528,7 @@ docs/features/<feature_name>/test-report-<YYYYMMDD>.md
 ## 产出
 test-report 追加 § Step 5；Push Gate：READY / NOT READY
 
-完成后：**Write** `{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md`（模板 D，覆盖写）；聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话。
+完成后：向 `{workspace_docs}/docs/features/<feature_name>/handoff-to-coach.md` **追加** `## 回传 <对话名>`（模板 D）；禁止整文件覆盖；聊天只出 **模板 D-人读**。
 提醒用户回教练窗：「<对话名> 完成，读 handoff」。
 ```
 
@@ -526,8 +554,8 @@ test-report 追加 § Step 5；Push Gate：READY / NOT READY
 
 ```
 1. 模板 A  → 开教练对话（长期保留）
-2. 教练给  → 模板 C + 任务正文
-3. 执行完  → Write `handoff-to-coach.md`（模板 D）+ 窗口只出 D-人读
+2. 教练给  → Write `kickoff.md` + 教练窗 C-人读（种子贴新窗）
+3. 执行完  → 向 `handoff-to-coach.md` 追加 `## 回传 {对话名}` + 窗口只出 D-人读
 4. 教练窗   → 「<对话名> 完成，读 handoff」（模板 B；不拷执行窗）
 5. Gate 你确认 → 再下一阶段
 6. 模板 I  → push 前
@@ -670,7 +698,7 @@ test-report 追加 § Step 5；Push Gate：READY / NOT READY
 
 请先 Read：docs/features/<feature_name>/session-checkpoint.md
 
-根据 checkpoint 给：当前步骤、下一【对话名】+ 完整提示词、是否更新 checkpoint。
+根据 checkpoint 给：当前步骤、Write kickoff + C-人读种子、是否更新 checkpoint。
 ```
 
 ---

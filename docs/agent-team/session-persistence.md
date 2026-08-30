@@ -37,7 +37,7 @@ docs/features/{feature_name}/session-checkpoint.md
 ### 何时更新
 
 - 每个 **Gate 通过**（Gate 1 / Gate 2 / Phase 4 Ready / Push Gate）
-- 每次执行结束 **Write `handoff-to-coach.md`** 之后（用户或 Agent 更新 checkpoint；不再把回传包贴给教练）
+- 每次执行结束 **追加** `handoff-to-coach.md` 中 `## 回传 {对话名}` 之后
 - **P3 每批**完成后：同步 `pending-todos.md` 开放数到 checkpoint
 - **trial-validation**：每 Phase AUDIT 后可在 checkpoint 记「最近 AUDIT 对话名」
 - **长对话结束前**（关 IDE 前）

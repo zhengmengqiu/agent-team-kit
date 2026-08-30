@@ -110,7 +110,9 @@
 
 ## 5. 回传教练（执行 Agent 结束时必 Write 文件）
 
-执行对话完成后，Agent **必须 Write** `{workspace_docs}/docs/features/{feature}/handoff-to-coach.md`（模板 D，覆盖写）。聊天**只出模板 D-人读**，禁止把 D 全文贴进对话。
+执行对话完成后，Agent **必须**向 `{workspace_docs}/docs/features/{feature}/handoff-to-coach.md` **追加** `## 回传 {对话名}`（模板 D）。禁止整文件覆盖其它回传节。聊天**只出模板 D-人读**。
+
+任务正文在 `kickoff.md` 的 `## 派工 {对话名}`；新窗只贴 C-人读种子。
 
 用户回教练窗：
 

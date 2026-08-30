@@ -10,7 +10,7 @@
 | 根 | 放什么 |
 |----|--------|
 | **kit** | playbook、agents、Gate（`.cursor/agents/`、`docs/agent-team/`、`.cursor/rules/agent-team-paths.mdc`） |
-| **workspace_docs** | proposal / design / tasks / todos / checkpoint / **handoff**（`docs/features/{feature}/`） |
+| **workspace_docs** | proposal / design / tasks / todos / checkpoint / **kickoff** / **handoff**（`docs/features/{feature}/`） |
 | **code_root** | 业务代码 + L2（`project-architecture.mdc`、`test-env.override.md`） |
 
 本 kit 仓只有 kit 根。spec 与业务代码不写进本仓。
@@ -56,7 +56,8 @@
 | `tasks.md` | P2 任务拆分 |
 | `pending-todos.md` | P2 后待办 |
 | `session-checkpoint.md` | 会话存档 |
-| `handoff-to-coach.md` | 执行结束回传教练（模板 D；覆盖写；聊天只出 D-人读） |
+| `kickoff.md` | 教练派工（模板 C；执行 Read「## 派工 {对话名}」） |
+| `handoff-to-coach.md` | 执行回传（模板 D；按对话名追加；禁止整文件覆盖） |
 
 ---
 
@@ -76,5 +77,6 @@
 
 | 日期 | 说明 |
 |------|------|
+| 2026-08-30 | 派工 `kickoff.md`；handoff 按对话名追加 |
 | 2026-08-30 | 推荐消费方式改为工作区版本钉 |
 | 2026-08-24 | 初版：三根目录 + 单仓退化 + `handoff-to-coach.md` |

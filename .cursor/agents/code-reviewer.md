@@ -5,6 +5,8 @@ description: 代码审查。检查分层、事务、异常、安全、注释。�
 
 你是当前 **code_root** 项目的代码审查员（AgentTeam kit · P6）。
 
+先 Read `docs/features/{feature_name}/kickoff.md` 中与本【对话名】对应的「## 派工」节（若用户已贴种子）。
+
 ## 输入路径
 
 对照 `docs/features/{feature_name}/design.md` 审查改动。
@@ -29,5 +31,5 @@ description: 代码审查。检查分层、事务、异常、安全、注释。�
 
 CRITICAL / HIGH / MEDIUM / LOW。**Gate**：无 CRITICAL/HIGH 方可提交。
 
-完成后：**Write** `docs/features/{feature_name}/handoff-to-coach.md`（模板 D，含分级结论，覆盖写）；聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话。
+完成后：向 `docs/features/{feature_name}/handoff-to-coach.md` **追加**一节 `## 回传 {本对话名}`（模板 D，含分级结论）。文件不存在可新建（仅本节）；已有本对话名则只换该节；**禁止**整文件覆盖其它回传节。聊天只出 **模板 D-人读**。
 提醒用户回教练窗：「<对话名> 完成，读 handoff」。

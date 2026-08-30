@@ -21,8 +21,8 @@
 ```
 ① 开教练对话（整个需求只开一次）
       ↓  @agent-team-coach + 模板A → 教练做 Gate 0 判 simple/complex
-② 教练给你【对话名】+ P1 提示词
-      ↓  新开执行对话，粘贴 → @requirements-analyst 产出 proposal.md
+② 教练 Write `kickoff.md`，窗内只给 C-人读种子
+      ↓  新开执行对话，只贴种子 → Agent 自己 Read kickoff
 ③ Gate 1 你确认 → 回教练要 P2
       ↓  新开执行对话 → @architect 产出 design.md + tasks.md
 ④ Gate 2 你确认 → 回教练要 P3
@@ -31,7 +31,7 @@
       ↓  → P4 @tester 测试 → P6 @code-reviewer 审查 → P7 提交
 ```
 
-每完成一步：执行 Agent **Write** `docs/features/{功能}/handoff-to-coach.md`，窗口只出五行短报；回教练窗发「<对话名> 完成，读 handoff」（不要拷执行窗正文），再更新 checkpoint。
+每完成一步：执行 Agent 向 `handoff-to-coach.md` **追加** `## 回传 {对话名}`，窗口只出五行短报；回教练窗发「<对话名> 完成，读 handoff」。
 
 ---
 

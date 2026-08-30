@@ -1,6 +1,6 @@
 # AgentTeam 教练操作手册（Playbook）
 
-> **一句话**：教练对话 = 导航仪（长期保留）；执行对话 = 干活（按步新开）；**对话名 + handoff-to-coach.md + Git checkpoint** 闭环（不要从执行窗拷全文回教练）。  
+> **一句话**：教练对话 = 导航仪；执行对话 = 干活；**kickoff.md 派工 + 按对话名追加 handoff + checkpoint** 闭环（教练窗不贴执行长文，不从执行窗拷全文）。  
 > 模板复制块见 [coach-kickoff-template.md](./coach-kickoff-template.md)；命名见 [agent-dialog-naming.md](./agent-dialog-naming.md)；持久化见 [session-persistence.md](./session-persistence.md)。
 
 ## 模板速查（点击跳转到可复制块）
@@ -9,7 +9,8 @@
 |------|------|
 | A 开场 | [打开](./coach-kickoff-template.md#template-a) |
 | B 续接 | [打开](./coach-kickoff-template.md#template-b) |
-| C 执行头 | [打开](./coach-kickoff-template.md#template-c) |
+| C 派工落盘 | [打开](./coach-kickoff-template.md#template-c) |
+| C-人读 | [打开](./coach-kickoff-template.md#template-c-user) |
 | D 回传包 | [打开](./coach-kickoff-template.md#template-d) |
 | D-人读 | [打开](./coach-kickoff-template.md#template-d-user) |
 | E 定制约定 | [打开](./coach-kickoff-template.md#template-e) |
@@ -193,7 +194,7 @@ P2 回传后同理 **Gate 2-OQ**（阻塞 P3）。
 |----|------|
 | **操作** | 新开对话 → `@agent-team-coach` → 粘贴 **[模板 A](./coach-kickoff-template.md#template-a)** |
 | **填写** | 项目、功能名、短名、性质、起始 Phase、需求要点 3~10 条 |
-| **教练输出** | 当前 Phase + 是否新开执行对话 + **【对话名】+ 完整提示词** |
+| **教练输出** | 当前 Phase + **Write kickoff.md** + 教练窗 **C-人读**（含新窗种子；禁止贴执行长文） |
 | **Git** | 创建 `docs/features/{feature_name}/session-checkpoint.md`（**[模板 J](./coach-kickoff-template.md#template-j)**） |
 
 ---
@@ -207,10 +208,10 @@ P2 回传后同理 **Gate 2-OQ**（阻塞 P3）。
 | **模式** | Agent |
 | **对话名** | `{feature}-P1-需求-proposal编写` |
 | **@** | `@requirements-analyst` |
-| **提示词** | **[模板 C](./coach-kickoff-template.md#template-c)** + **[模板 F](./coach-kickoff-template.md#template-f)** + **[模板 OQ](./coach-kickoff-template.md#template-oq)**（P1 段） |
+| **派工** | 教练 Write **[kickoff.md](./coach-kickoff-template.md#template-c)**（内含 F + OQ）；窗内只出 **[C-人读](./coach-kickoff-template.md#template-c-user)** |
 | **产出** | `docs/features/{feature_name}/proposal.md`（含 `## 开放问题` 表） |
 | **Gate 1** | **你**审 proposal + **Gate 1-OQ**（阻塞 P2 的 OQ 已在 P1 对话确认）→ 回复教练「Gate 1 通过」或「Gate 1-OQ 已确认」 |
-| **收尾** | 执行 Agent **Write** **[模板 D](./coach-kickoff-template.md#template-d)** 到 `handoff-to-coach.md`（聊天只出 D-人读）→ 用户回教练窗「读 handoff」→ 教练 **Read** 文件 → **更新 checkpoint** |
+| **收尾** | 执行 Agent 向 `handoff-to-coach.md` **追加** `## 回传 {对话名}`（模板 D；禁止整文件覆盖）→ 聊天只出 D-人读 → 用户回教练窗「读 handoff」→ 教练 Read **该节** → 更新 checkpoint |
 
 ---
 
@@ -224,7 +225,7 @@ P2 回传后同理 **Gate 2-OQ**（阻塞 P3）。
 | **Read** | `proposal.md`（含开放问题表） |
 | **产出** | `design.md`（含 `## 开放问题决议`）、`tasks.md`（未决 task 标 `[OQ-0N]`） |
 | **Gate 2** | **你**确认 design/tasks + **Gate 2-OQ**（阻塞 P3 的 OQ 已决议或接受默认分支） |
-| **收尾** | Write `handoff-to-coach.md` → 用户回教练窗「读 handoff」→ 教练 Read → 更新 checkpoint |
+| **收尾** | 追加 `## 回传 {对话名}` → 用户回教练窗「读 handoff」→ 教练 Read 该节 → 更新 checkpoint |
 
 ---
 
@@ -236,7 +237,8 @@ P2 回传后同理 **Gate 2-OQ**（阻塞 P3）。
 | **P3B** | `{feature}-P3B-开发-核心业务T6-T10` | 同上 | C/Admin 主路径、消息、Speed |
 | **P3C** | `{feature}-P3C-开发-收尾T11-T14` | 同上 | 列表、批量、配置、baseline |
 
-每批：**[模板 C](./coach-kickoff-template.md#template-c)** + tasks.md 本批 Task + **Write [模板 D](./coach-kickoff-template.md#template-d)** 到 `handoff-to-coach.md` + **[checkpoint J](./coach-kickoff-template.md#template-j)**。**不要一个窗口 T1–T14。**  
+每批：教练 Write `kickoff.md`（C-人读给种子）+ 本批 Task；执行结束 **追加** 模板 D 到 `handoff-to-coach.md`（禁止整文件覆盖）+ checkpoint J。**不要一个窗口 T1–T14。**  
+**并行上限 2**：最多同时两个执行窗；两窗同时派工时 `kickoff.md` 写两节 `## 派工 {对话名}`。  
 **OQ / 待办**：L1 即时确认；L2/依赖写入 `pending-todos.md` 并持续补全；L1 未决 ❌ 阻塞本批；L2 不阻塞下一批（见 §1.1.1）。
 
 ---
@@ -315,10 +317,10 @@ P2 回传后同理 **Gate 2-OQ**（阻塞 P3）。
 ## 3. 每一步固定动作清单（执行者勾选）
 
 ```
-□ 1. 教练给出【对话名】+ 提示词
-□ 2. 新开 Agent 对话，侧栏重命名为【对话名】
-□ 3. 粘贴【模板 C 头】+ 任务正文
-□ 4. 执行完成 → Write `handoff-to-coach.md`（模板 D）；窗口只出 D-人读
+□ 1. 教练 Write `kickoff.md`，窗内只给人读 + 种子
+□ 2. 新开 Agent 对话，侧栏重命名为【对话名】，只贴种子
+□ 3. 执行 Agent Read `kickoff.md` 对应「## 派工」节
+□ 4. 执行完成 → 向 `handoff-to-coach.md` 追加 `## 回传 {对话名}`；窗口只出 D-人读
 □ 5. 回教练窗：「<对话名> 完成，读 handoff」（不拷执行窗正文）
 □ 6. 更新 session-checkpoint.md（模板 J）
 □ 7. Gate 需你确认时，回复教练后再要下一步
@@ -341,8 +343,8 @@ P2 回传后同理 **Gate 2-OQ**（阻塞 P3）。
 
 | 情况 | 操作 |
 |------|------|
-| 执行 **❌ 阻塞** | 先 Write `handoff-to-coach.md`（状态❌）→ 回教练窗「读 handoff」→ 给 **修复对话名**（如 P6-S4R），**不要**进下一阶段 |
-| 执行 **⚠️ 部分完成** | 教练判断是否可并行或必须先补测 |
+| 执行 **❌ 阻塞** | 先追加 `## 回传 {对话名}`（状态❌）→ 回教练窗「读 handoff」→ 给 **修复对话名**（如 P6-S4R），**不要**进下一阶段 |
+| 执行 **⚠️ 部分完成** | 教练判断是否可并行（最多 2）或必须先补测 |
 | **教练对话被删** | **[模板 K](./coach-kickoff-template.md#template-k)** + Read checkpoint |
 | **执行对话被删** | 同上；按 checkpoint「下一对话名」重开，已完成的勿重跑 |
 | 审查 HIGH 未修 | 禁止 P7；走 S1 → S4 → S5 |
@@ -367,7 +369,7 @@ P2 回传后同理 **Gate 2-OQ**（阻塞 P3）。
 | 时刻 | 你做 | 用模板 |
 |------|------|--------|
 | 上午 | 开教练对话 | **[A](./coach-kickoff-template.md#template-a)** |
-| | 拿 P1 提示词 → 新开执行 | **[C](./coach-kickoff-template.md#template-c)** + **[F](./coach-kickoff-template.md#template-f)** |
+| | 拿 P1：开执行窗，只贴 C-人读种子 | **[C-人读](./coach-kickoff-template.md#template-c-user)** |
 | 下午 | proposal Gate 1 通过 → 要 P2 | **[B](./coach-kickoff-template.md#template-b)** |
 | | design Gate 2 → 要 P3A | **[B](./coach-kickoff-template.md#template-b)** |
 | 每天结束 | 更新 checkpoint | **[J](./coach-kickoff-template.md#template-j)** |

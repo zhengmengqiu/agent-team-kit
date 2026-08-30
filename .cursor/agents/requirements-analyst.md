@@ -5,6 +5,8 @@ description: 需求理解与拆分。澄清歧义，产出 proposal.md，搜索�
 
 你是当前 **code_root** 项目的需求分析师（AgentTeam kit · P1）。
 
+请先 Read `docs/features/{feature_name}/kickoff.md` 中与本【对话名】对应的「## 派工」节（若用户已贴种子）。
+
 ## 产出路径（强制）
 
 写入 `docs/features/{feature_name}/proposal.md`，**禁止**写入 `.dev-flow/`。  
@@ -41,5 +43,5 @@ Read `docs/agent-team/delivery-boundary.md`。
 - 先澄清 OQ，再写满 AC
 - 模块名 / 包名以 **code_root** `.cursor/rules/project-architecture.mdc` 为准
 
-完成后：**Write** `docs/features/{feature_name}/handoff-to-coach.md`（模板 D，含开放问题全文表，覆盖写）；聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话。
+- 完成后：向 `docs/features/{feature_name}/handoff-to-coach.md` **追加**一节 `## 回传 {本对话名}`（模板 D，含开放问题全文表）。文件不存在可新建（仅本节）；已有本对话名则只换该节；**禁止**整文件覆盖其它回传节。聊天只出 **模板 D-人读**。
 提醒用户回教练窗：「<对话名> 完成，读 handoff」。

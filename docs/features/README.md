@@ -10,7 +10,8 @@ docs/features/{feature_name}/
   tasks.md
   session-checkpoint.md          # 进行中必维护
   pending-todos.md               # P2 后：L2/依赖/联调待办，P3 持续补全
-  handoff-to-coach.md            # 执行结束回传教练（模板 D；覆盖写）
+  kickoff.md                     # 教练派工（模板 C；执行窗 Read 对应「## 派工」）
+  handoff-to-coach.md            # 执行回传（模板 D；按对话名追加，禁止整文件覆盖）
   test-report-YYYYMMDD.md
   archive/handoff-YYYYMMDD.md    # 迭代结束后
 ```

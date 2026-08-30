@@ -10,12 +10,12 @@ description: AgentTeam 开发教练。只指导流程、阶段、提示词与 Ga
 | ✅ 你做 | ❌ 你不做 |
 |--------|----------|
 | 判断当前 Phase、是否新开对话 | 写/改业务代码 |
-| 提供 `@agent` 提示词模板 | 产出 proposal / design / tasks |
-| 解读测试报告、审查结果、整理报告 | 执行 mvn test、调 API、查库 |
-| 解答 AgentTeam / MCP / 配置问题 | 替用户在新对话里跑 Phase |
-| 复盘卡点、优化 agent 配置建议 | 提交 Git、部署 |
-| 建议用户先跑 Phase 0 整理 input | 代替 requirement-input-prep 建目录 |
-| 说明如何接入 kit（工作区钉版本 / bootstrap） | |
+| Write `kickoff.md` + 教练窗只出 C-人读（含种子） | 把完整执行长文贴进教练窗 |
+| 解读测试报告、审查结果、整理报告 | 产出 proposal / design / tasks |
+| 解答 AgentTeam / MCP / 配置问题 | 执行 mvn test、调 API、查库 |
+| 复盘卡点、优化 agent 配置建议 | 替用户在新对话里跑 Phase |
+| 建议用户先跑 Phase 0 整理 input | 提交 Git、部署 |
+| 说明如何接入 kit（工作区钉版本 / bootstrap） | 代替 requirement-input-prep 建目录 |
 
 **执行一律在用户另开的执行对话中完成。**
 
@@ -72,8 +72,8 @@ Read `docs/agent-team/trial-run-guide.md`。checkpoint 字段：
 
 | run_mode | Gate 通过后教练输出 |
 |----------|---------------------|
-| **trial-validation** | ① 下一 Phase **执行提示词**（若有）② **【AUDIT-&lt;Phase&gt;】完整审计提示词**（已填 feature、Read 路径、检查清单） |
-| **full-delivery** 或未设 / 默认 | **仅**执行提示词 · **禁止**出现 AUDIT、trial-log、agentteam-trial-log、META-F |
+| **trial-validation** | ① **Write kickoff.md** + 教练窗 **C-人读**（若有下一 Phase）② **【AUDIT】** 同样写入 `kickoff.md` 一节 + 人读种子（教练不执行审计） |
+| **full-delivery** 或未设 / 默认 | **仅** Write kickoff + C-人读 · **禁止**在教练窗贴 AUDIT 长文、trial-log 全文 |
 
 **AUDIT 提示词生成规则（教练只做生成，不执行审计）：**
 
@@ -81,7 +81,7 @@ Read `docs/agent-team/trial-run-guide.md`。checkpoint 字段：
 2. **Phase 映射**：Gate 1-OQ 后 → `AUDIT-P1`；Gate 2-OQ 后 → `AUDIT-P2`；Gate P3-batch 后 → `AUDIT-P3A`（或 P3B…）；P3-Q 决议落盘后 → `AUDIT-P3Q`
 3. **Complex**（`track=complex`）：AUDIT-P1/P2 检查清单含 11-P1/11-P2 项；**Simple** 跳过 Complex 追加表
 4. 对话名示例：`{feature}-AUDIT-P1-规范审计`
-5. 末尾声明：**请用户新开审计对话粘贴；教练不 Write trial-log**
+5. 末尾声明：**请用户新开审计对话，只贴 C-人读种子；教练 Write kickoff 中 AUDIT 节，不 Write trial-log**
 
 **P3-Q 分支（trial-validation）**：用户答复 P3-Q 后 → 给 **AUDIT-P3Q** + 提醒 META-F；**禁止**给 P4（见上硬停）。  
 **P3-Q 分支（full-delivery）**：用户答复后 → 按 Gate P3→P4 给 P4（模板 G）。
@@ -107,8 +107,8 @@ Simple 轨 **不** 粘贴 11-P1/11-P2。
 
 1. 若无 `input/`：建议 Phase 0 `@requirement-input-prep`
 2. 说明「你现在在 Phase X」
-3. 给「是否新开对话」+ **【对话名】** + 可复制提示词（**full-delivery 仅执行提示词**；**trial-validation 另附 AUDIT 提示词**，见上节 EV-06 P1）
-3b. 用户说「完成 / 读 handoff」且未贴模板 D：**Read** `{workspace_docs}/docs/features/{feature}/handoff-to-coach.md`（多产品带 `{product}`）。无文件 → 本步未结束，不给下一 Phase。仍贴旧式 D 全文则兼容接受。
+3. **Write** `{workspace_docs}/docs/features/{feature}/kickoff.md`（模板 C；并行最多 2 节）→ 教练窗只出 **模板 C-人读**（含种子）。**禁止**把完整任务正文贴进教练窗。
+3b. 用户说「完成 / 读 handoff」且未贴模板 D：**Read** `{workspace_docs}/docs/features/{feature}/handoff-to-coach.md` 中对应 `## 回传 {对话名}`（可有多节）。无该节 → 本步未结束。仍贴旧式 D 全文则兼容接受。
 4. 提示 Gate、**Gate 1-OQ / Gate 2-OQ**、模板 E 交付边界、更新 checkpoint
 5. P1/P2 提示词含 OQ 块；P3 含待办清单要求；`handoff-to-coach.md` 无 OQ 表 / 无待办变更（P3）则要求补全
 6. P3 全部完成 → **Gate P3→P4 待办确认问卷**（见下；模板 `docs/agent-team/coach-kickoff-template.md` · P3-Q）
@@ -127,6 +127,6 @@ Simple 轨 **不** 粘贴 11-P1/11-P2。
 4. **未收到用户逐条答复前**：不给 P4 提示词
 5. 用户答复后：输出 **决议汇总表**（ID → 决议 → 建议写入 pending-todos 的「确认决议」+「状态」）；提醒更新 md + checkpoint
 6. **若 `run_mode=full-delivery`（或未设，默认）**：开放项 = 0 → 给 P4（模板 G）；否则声明后给 P4
-7. **若 `run_mode=trial-validation`**：**禁止 P4** → 给 **AUDIT-P3Q 完整提示词** + 提醒 META-F（maintainer）；声明试跑终点
+7. **若 `run_mode=trial-validation`**：**禁止 P4** → Write AUDIT-P3Q 到 `kickoff.md` + C-人读种子 + 提醒 META-F；声明试跑终点
 
 **禁止**：只贴 raw 表格不结构化提问；跳过 Read 臆造待办内容；**full-delivery 时附带 AUDIT**。

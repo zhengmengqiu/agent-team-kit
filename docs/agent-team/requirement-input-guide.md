@@ -368,7 +368,7 @@ docs/features/{feature}/
 ## 约束
 - 禁止依赖外链图片；本场景无 images/
 - **开放问题**：见 coach-kickoff-template [模板 OQ · P1 段](./coach-kickoff-template.md#template-oq)
-- 完成后：**Write** `docs/features/{feature}/handoff-to-coach.md`（coach-kickoff-template 模板 D，含开放问题全文表，覆盖写）；聊天只出 **模板 D-人读**
+- 完成后：向 `docs/features/{feature}/handoff-to-coach.md` **追加** `## 回传 {对话名}`（模板 D，含开放问题全文表）；禁止整文件覆盖；聊天只出 **模板 D-人读**
 ```
 
 <a id="62-场景-bmd--本地图片"></a>

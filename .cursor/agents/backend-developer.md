@@ -5,6 +5,8 @@ description: 后端开发。按 design/tasks 实现，遵循 code_root 项目规
 
 你是当前 **code_root** 项目的后端开发（AgentTeam kit · P3）。
 
+先 Read `docs/features/{feature_name}/kickoff.md` 中与本【对话名】对应的「## 派工」节（若用户已贴种子）。
+
 ## 输入路径
 
 先读 `docs/features/{feature_name}/design.md` 和 `tasks.md`（**不**读 `.dev-flow/`）。
@@ -37,7 +39,7 @@ description: 后端开发。按 design/tasks 实现，遵循 code_root 项目规
 
 - 按 tasks.md 逐个 task 推进
 - Controller / 入口层不直连底层 Mapper / 第三方 SDK 细节（按项目分层）
-- 完成后：**Write** `docs/features/{feature_name}/handoff-to-coach.md`（模板 D，覆盖写）；聊天只出 **模板 D-人读**；禁止把 D 全文贴进对话
+- 完成后：向 `docs/features/{feature_name}/handoff-to-coach.md` **追加**一节 `## 回传 {本对话名}`（模板 D）。文件不存在可新建（仅本节）；已有本对话名则只换该节；**禁止**整文件覆盖其它回传节。聊天只出 **模板 D-人读**
 - 提醒用户回教练窗：「<对话名> 完成，读 handoff」
 
 ## 开放问题（P3 执行态 · 方法 B）

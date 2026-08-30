@@ -27,7 +27,8 @@ alwaysApply: true
 | tasks.md | `docs/features/{feature_name}/tasks.md` |
 | test-report | `docs/features/{feature_name}/test-report-{YYYYMMDD}.md` |
 | session-checkpoint | `docs/features/{feature_name}/session-checkpoint.md` |
-| **回传教练（执行结束）** | `docs/features/{feature_name}/handoff-to-coach.md` |
+| **派工（教练 → 执行）** | `docs/features/{feature_name}/kickoff.md` |
+| **回传教练（按对话名追加）** | `docs/features/{feature_name}/handoff-to-coach.md` |
 | **试跑审计 log（trial-validation）** | `docs/features/{feature_name}/agentteam-trial-log.md` |
 | **待办清单（P2 后）** | `docs/features/{feature_name}/pending-todos.md` |
 | **需求 input（P0）** | `docs/features/{feature_name}/input/` |

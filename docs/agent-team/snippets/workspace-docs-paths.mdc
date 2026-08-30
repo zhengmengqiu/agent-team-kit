@@ -8,7 +8,7 @@ alwaysApply: true
 本 folder 是 **workspace_docs**（不是纯 kit、不是 code_root）。
 
 - spec 写这里：`docs/features/{feature}/`（多产品才加 `{product}`）
-- 执行结束 **Write** `docs/features/{feature}/handoff-to-coach.md`（模板 D，覆盖写）
+- 执行结束向 `docs/features/{feature}/handoff-to-coach.md` **追加** `## 回传 {对话名}`（模板 D；禁止整文件覆盖）
 - 聊天只出模板 D-人读；禁止把 D 全文贴进对话
 - spec **禁止** `.dev-flow/`；**禁止**写入纯 kit
 

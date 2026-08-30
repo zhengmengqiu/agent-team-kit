@@ -69,7 +69,8 @@ AgentTeam 是 **agent-team-kit**（**标准源 / kit**）的一套 **多 Agent �
 | tasks | `docs/features/{feature}/tasks.md` |
 | 待办清单 | `docs/features/{feature}/pending-todos.md`（P2 后创建，P3~P7 持续维护） |
 | 会话存档 | `docs/features/{feature}/session-checkpoint.md`（含 `track` 字段） |
-| **回传教练** | `docs/features/{feature}/handoff-to-coach.md`（执行结束覆盖写） |
+| **回传教练** | `docs/features/{feature}/handoff-to-coach.md`（按对话名追加） |
+| **派工** | `docs/features/{feature}/kickoff.md`（教练 Write；执行 Read） |
 | 测试报告 | `docs/features/{feature}/test-report-{YYYYMMDD}.md` |
 | 归档 | `docs/features/{feature}/archive/handoff-{YYYYMMDD}.md` |
 
@@ -96,7 +97,7 @@ AgentTeam 是 **agent-team-kit**（**标准源 / kit**）的一套 **多 Agent �
 | **P7** 提交 | `{feature}-P7-开发-commit与PR` | `@backend-developer` / 你 | commit / PR | Push Gate READY |
 | **P8** 归档 | — | 你 | archive/handoff | — |
 
-每步固定动作：教练给【对话名】+ 提示词 → 新开对话粘贴 → 执行 → **Write** `handoff-to-coach.md`（聊天只出 D-人读）→ 回教练「读 handoff」→ 更新 checkpoint。
+每步固定动作：教练 Write `kickoff.md` + 人读种子 → 新开对话只贴种子 → 执行 → 向 `handoff-to-coach.md` **追加** `## 回传 {对话名}` → 回教练「读 handoff」→ 更新 checkpoint。并行最多 2 窗。
 
 > **P3 分批**：不要一个窗口做 T1–T14。建议基础设施 / 核心业务 / 收尾各一批。
 
