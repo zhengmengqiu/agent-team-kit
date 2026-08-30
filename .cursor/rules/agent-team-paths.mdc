@@ -1,0 +1,59 @@
+---
+description: AgentTeam 文档产出路径与 spec-author 路径覆盖
+alwaysApply: true
+---
+
+# AgentTeam 路径约定
+
+本工作区使用 **AgentTeam 工作流**。kit 与 code_root / workspace_docs 通过 `.code-workspace` 多根打开。spec 统一写入 `docs/features/`，**不**使用 `.dev-flow/`。
+
+> **标准源**：`agent-team-kit`（本规则所在仓）。接入方式见 `docs/agent-team/bootstrap-new-project.md`。  
+> **三根目录**：见 `docs/agent-team/workspace-layout.md`。
+
+## Spec 根 workspace_docs（命中即停）
+
+1. 模板 A / `session-checkpoint.md` 已写 `workspace_docs`（可选 `target_product`）
+2. 工作区存在名为 `*-docs` 的 folder
+3. 否则：当前 **code_root**（业务/验证项目根）
+
+默认：`workspace_docs` = code_root；spec 写 `docs/features/{feature}/`。多产品工作区才加 `{product}`。
+
+## 产出路径（强制）
+
+| 文档 | 路径 |
+|------|------|
+| proposal.md | `docs/features/{feature_name}/proposal.md` |
+| design.md | `docs/features/{feature_name}/design.md` |
+| tasks.md | `docs/features/{feature_name}/tasks.md` |
+| test-report | `docs/features/{feature_name}/test-report-{YYYYMMDD}.md` |
+| session-checkpoint | `docs/features/{feature_name}/session-checkpoint.md` |
+| **回传教练（执行结束）** | `docs/features/{feature_name}/handoff-to-coach.md` |
+| **试跑审计 log（trial-validation）** | `docs/features/{feature_name}/agentteam-trial-log.md` |
+| **待办清单（P2 后）** | `docs/features/{feature_name}/pending-todos.md` |
+| **需求 input（P0）** | `docs/features/{feature_name}/input/` |
+
+`{feature_name}`：用户指定或从需求标题 kebab-case 推导（≤40 字符）。
+
+## L2（仅 code_root）
+
+| 文件 | 说明 |
+|------|------|
+| `.cursor/rules/project-architecture.mdc` | 包名、模块、测试命令 |
+| `docs/agent-team/test-env.override.md` | 端口 / 库名 / MCP（kit 仅提供 `.example`） |
+
+## spec-author Skill 路径覆盖
+
+- **遵循**流程、模板、Gate 1
+- **覆盖**产出路径为 `docs/features/{feature_name}/`，**禁止** `.dev-flow/`
+
+## MCP / Skill 联动
+
+| 阶段 | 工具 |
+|------|------|
+| P0 整理 | `@requirement-input-prep` · `scripts/download-md-images.ps1` |
+| 设计（表结构） | MySQL MCP（若已配置；见 code_root `test-env.override.md`） |
+| 测试（API 冒烟） | api-tester MCP → `app_base` |
+| **试跑 SOP** | [trial-run-guide.md](../../docs/agent-team/trial-run-guide.md) · 模板 AUDIT |
+
+对话命名：`docs/agent-team/agent-dialog-naming.md`  
+交付边界：`docs/agent-team/delivery-boundary.md`

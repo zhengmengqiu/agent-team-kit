@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "agent-team-kit@v0.1.0",
+      "path": "../.agent-team-worktrees/v0.1.0"
+    },
+    {
+      "name": "YOUR_PROJECT",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "agentTeam.kitRepo": "../agent-team-kit",
+    "agentTeam.worktreesRoot": "../.agent-team-worktrees",
+    "agentTeam.version": "v0.1.0"
+  }
+}

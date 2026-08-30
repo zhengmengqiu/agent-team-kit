@@ -1,0 +1,15 @@
+---
+description: 本 folder 是 AgentTeam workspace_docs（给将来的 *-docs 仓用）
+alwaysApply: true
+---
+
+# workspace_docs 路径片段
+
+本 folder 是 **workspace_docs**（不是纯 kit、不是 code_root）。
+
+- spec 写这里：`docs/features/{feature}/`（多产品才加 `{product}`）
+- 执行结束 **Write** `docs/features/{feature}/handoff-to-coach.md`（模板 D，覆盖写）
+- 聊天只出模板 D-人读；禁止把 D 全文贴进对话
+- spec **禁止** `.dev-flow/`；**禁止**写入纯 kit
+
+`workspace_docs` 解析见 kit 内 `.cursor/rules/agent-team-paths.mdc` 与 `docs/agent-team/workspace-layout.md`。
