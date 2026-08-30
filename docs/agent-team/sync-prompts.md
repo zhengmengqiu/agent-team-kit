@@ -46,9 +46,19 @@
 
 ## 场景 2：kit → 业务项目（新开或对齐）
 
-**推荐**：改目标项目 `.code-workspace` 的 `agentTeam.version` → 跑 `Sync-AgentTeamWorkspace.ps1`（无需拷文件）。
+**推荐**：改工作目录 `.code-workspace` 的 `agentTeam.version` → 跑 `Sync-AgentTeamWorkspace.ps1`（无需把 kit 文件拷进业务仓）。
 
-**兼容 copy**（旧方式）时粘贴：
+```text
+【任务】对齐业务/验证仓到指定 kit tag
+【工作目录】<如 D:\develop-project>
+【工作区文件】develop-project.code-workspace
+【目标版本】vX.Y.Z
+
+改 settings.agentTeam.version 后执行 Sync-AgentTeamWorkspace.ps1。
+不要覆盖 code_root 的 project-architecture.mdc 与 test-env.override.md。
+```
+
+**兼容 copy**（仅过渡，不推荐）：
 
 ```text
 【任务】AgentTeam 从 kit 部署到业务项目（兼容 copy）

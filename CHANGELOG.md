@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.2 — 2026-08-30
+
+- 团队默认：`.code-workspace` 放在本机工作目录，不进业务 git
+- bootstrap / sync 叙事：标准源=kit，copy 仅兼容
+- 模板相对路径改为工作目录（`./agent-team-kit`）
+
 ## v0.1.1 — 2026-08-30
 
 - 冻结工作区版本钉协议：`docs/agent-team/workspace-version-pin.md`

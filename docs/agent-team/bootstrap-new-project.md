@@ -1,8 +1,8 @@
 # 接入 AgentTeam（agent-team-kit）
 
 > **标准源**：本仓库 `agent-team-kit`。  
-> **推荐**：本地并列 + `.code-workspace` 钉版本（可随时回调 tag）。  
-> **兼容**：整目录复制进业务仓（易漂移，仅过渡）。
+> **默认接入**：本机工作目录放 `.code-workspace`，钉 tag（见 [workspace-version-pin.md](./workspace-version-pin.md)）。  
+> **兼容 copy**：把 agents/docs 拷进业务仓——易漂移，仅过渡，不是团队默认。
 
 ---
 
@@ -11,27 +11,27 @@
 ### 1. 目录
 
 ```text
-<workspace>/
-  agent-team-kit/              # clone 本仓
-  .agent-team-worktrees/       # sync 脚本生成，按 tag 只读依赖
-  your-project/                # 业务或验证仓
-    your-project.code-workspace
+<工作目录>/                    # 例如 D:\develop-project
+  develop-project.code-workspace
+  agent-team-kit/
+  .agent-team-worktrees/
+  your-project/
 ```
 
 ### 2. 创建工作区
 
-复制 [templates/project.code-workspace.template.json](../../templates/project.code-workspace.template.json) 为 `your-project.code-workspace`：
+复制 [templates/project.code-workspace.template.json](../../templates/project.code-workspace.template.json) 到**工作目录**（不要放进业务仓 git）：
 
 ```json
 {
   "folders": [
-    { "name": "agent-team-kit@v0.1.0", "path": "../.agent-team-worktrees/v0.1.0" },
-    { "name": "your-project", "path": "." }
+    { "name": "agent-team-kit@v0.1.1", "path": ".agent-team-worktrees/v0.1.1" },
+    { "name": "your-project", "path": "your-project" }
   ],
   "settings": {
-    "agentTeam.kitRepo": "../agent-team-kit",
-    "agentTeam.worktreesRoot": "../.agent-team-worktrees",
-    "agentTeam.version": "v0.1.0"
+    "agentTeam.kitRepo": "./agent-team-kit",
+    "agentTeam.worktreesRoot": "./.agent-team-worktrees",
+    "agentTeam.version": "v0.1.1"
   }
 }
 ```
@@ -39,7 +39,7 @@
 ### 3. 同步版本
 
 ```powershell
-..\agent-team-kit\scripts\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile .\your-project.code-workspace
+.\agent-team-kit\scripts\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile .\develop-project.code-workspace
 ```
 
 用 Cursor **打开 `.code-workspace`**（多根：kit worktree + 项目）。

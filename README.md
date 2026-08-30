@@ -5,17 +5,13 @@
 
 ## 快速使用
 
-1. Clone 本仓到与业务项目同级，例如：
-   ```text
-   D:\develop-project\agent-team-kit
-   D:\develop-project\your-project
-   ```
-2. 在业务项目复制 [templates/project.code-workspace.template.json](templates/project.code-workspace.template.json) 为 `your-project.code-workspace`，改项目名与 `agentTeam.version`。
-3. 打 tag 后执行同步（首次需本仓已有对应 tag）：
+1. Clone 本仓到本机工作目录（与业务仓同级），例如 `D:\develop-project\agent-team-kit`。
+2. 把 [templates/project.code-workspace.template.json](templates/project.code-workspace.template.json) 复制到**工作目录**，改名为工作目录名（如 `develop-project.code-workspace`），补上要打开的仓。
+3. 同步：
    ```powershell
-   ..\agent-team-kit\scripts\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile .\your-project.code-workspace
+   .\agent-team-kit\scripts\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile .\develop-project.code-workspace
    ```
-4. 用 Cursor **打开该 `.code-workspace`**（不要只开业务单仓），再 `@agent-team-coach`。
+4. 用 Cursor **打开该 `.code-workspace`**，再 `@agent-team-coach`。
 
 换版本：改 `settings.agentTeam.version` → 再跑 sync → Reload Window。
 

@@ -6,7 +6,7 @@
   目标 .code-workspace 路径。省略则在当前目录查找唯一的 *.code-workspace。
 
 .EXAMPLE
-  .\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile .\your-project.code-workspace
+  .\Sync-AgentTeamWorkspace.ps1 -WorkspaceFile .\develop-project.code-workspace
 #>
 [CmdletBinding()]
 param(
